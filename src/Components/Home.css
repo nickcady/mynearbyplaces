@@ -1,0 +1,38 @@
+.addplace {
+    float: right;
+    background-color: #ffffff;
+}
+
+.buttons {
+    text-align: right;
+}
+
+.reviews {
+    text-align: center;
+}
+
+.resultbox {
+    border: 2px solid black;
+    text-align: left;
+}
+
+.welcome {
+    width: 50%;
+    background-color: white;
+    margin: auto;
+    padding: 10px;
+    border: 10 solid black;
+    text-align: center;
+}
+
+.near {
+    display: block;
+    text-align: center;
+    line-height: 250%;
+    font-size: 2em;
+}
+
+body {
+    background-color: lightslategray;
+    align-content: center;
+}

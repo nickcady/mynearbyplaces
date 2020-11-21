@@ -1,0 +1,22 @@
+.addform {
+    position: fixed;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    background-color: white;
+    margin: auto;
+    padding-top: auto;
+    padding: 10px;
+    border: 10 solid black;
+    text-align: center;
+}
+
+.title {
+    text-align: center;
+    line-height: 250%;
+    font-size: 2em;
+}
+
+.buttons {
+    align-content: right;
+}

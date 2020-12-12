@@ -13,7 +13,7 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            reviews: [],
             results: [],
             searchType: 'city',
             searchTerm: '',
@@ -24,20 +24,13 @@ class Home extends React.Component {
     }
 
     searchSubmit = (event) => {
-        let { data, searchType, searchTerm } = this.state;
-        let results = [];
-        data.forEach(place => {
-            if (searchType === 'city') {
-                if (place.city === searchTerm) {
-                    results.push(place);
-                }
-            } else if (searchType === 'name') {
-                if (place.name === searchTerm) {
-                    results.push(place);
-                }
+        let { searchType, searchTerm } = this.state;
+        server.search(searchType, searchTerm).then(results => {
+            for (let i = 0; i < results.length; i++) {
+                server.getReviews(results[i].id).then(y => results[i].reviews = y);
             }
-        });
-        this.setState({ results: results, entered: true });
+            this.setState({ results: results, entered: true })
+        })
     }
 
     onOptionChange = (event) => {
@@ -53,14 +46,11 @@ class Home extends React.Component {
     }
 
     removeEntry = (p, e) => {
-        this.state.results.slice(this.state.results.indexOf(p), 1);
-        server.removePlace(p);
-        this.searchSubmit();
-        console.log(this.state.data);
+        console.log(p.reviews);
     }
 
     addReview = (p, e) => {
-        this.setState({review: true, place: p});
+        this.setState({ review: true, place: p });
     }
 
     body = () => {
@@ -70,7 +60,7 @@ class Home extends React.Component {
                     <Form.Group>
                         <Form.Control as="select" size="lg" value={this.state.selector} onChange={this.onOptionChange}>
                             <option value='city'>City</option>
-                            <option value='name'>Name</option>
+                            <option value='state'>State</option>
                         </Form.Control>
                         <Form.Control type="text" placeholder="search..." value={this.state.searchTerm}
                             onChange={this.onSearchChange} />
@@ -83,6 +73,10 @@ class Home extends React.Component {
 
     renderResults = () => {
         let { results } = this.state;
+        // for (let i = 0; i < results.length; i++) {
+        //     console.log(results[i]);
+        // }
+        // console.log(results);
         return (
             <Container className='result'>
                 <Col>
@@ -90,13 +84,13 @@ class Home extends React.Component {
                         <Container>
                             {results.map((p, i) =>
                                 <Container key={i} className='resultbox'>
-                                    <label>{(i + 1) + ': ' + p.name}</label>
+                                    <label>{(i + 1) + ': ' + p.place}</label>
                                     <br />
                                     <label>{p.city + ", " + p.state}</label>
                                     <br />
                                     <label>{p.category}</label>
                                     <br />
-                                    {p.reviews.length > 0 ?
+                                    {(p.reviews !== undefined && p.reviews.length > 0) ?
                                         <Container>
                                             <label>Reviews:</label>
                                             <br />
@@ -123,16 +117,10 @@ class Home extends React.Component {
         );
     }
 
-    componentDidMount() {
-        let data = server.getPlaces();
-        this.setState({ data: data });
-
-    }
-
     render() {
         let { review, place } = this.state;
         if (review) {
-            return (<Redirect to={{pathname: "/addreview", state: {place: place}}} />);
+            return (<Redirect to={{ pathname: "/addreview", state: { place: place } }} />);
         }
         return (
             <Container>

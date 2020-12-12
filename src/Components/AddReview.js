@@ -13,13 +13,14 @@ class AddReview extends React.Component {
         super(props);
         this.state = {
             entered: false,
-            review: ''
+            review: '',
+            done: false
         };
     }
 
     onSubmit = (place, event) => {
         let { review } = this.state;
-        server.addReview(place, review);
+        server.addReview(place.id, review);
         event.preventDefault();
         this.setState({done: true});
     }

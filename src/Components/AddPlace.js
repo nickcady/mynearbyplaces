@@ -32,10 +32,6 @@ class AddPlace extends React.Component {
         this.setState({done: true});
     }
 
-    componentDidMount() {
-        let data = server.getPlaces();
-        this.setState({ data: data });
-    }
 
     onInputChange = (event) => {
         let value = event.target.value;
